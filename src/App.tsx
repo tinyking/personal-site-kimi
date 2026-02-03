@@ -9,6 +9,7 @@ import BlogPage from '@/pages/BlogPage';
 import BlogDetailPage from '@/pages/BlogDetailPage';
 import JournalPage from '@/pages/JournalPage';
 import AboutPage from '@/pages/AboutPage';
+import MarkdownDebugger from '@/debug/MarkdownDebugger';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/blog/:slug" element={<BlogDetailPage />} />
             <Route path="/journal" element={<JournalPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/debug" element={<MarkdownDebugger />} />
           </Routes>
           <Footer />
           <Toaster 

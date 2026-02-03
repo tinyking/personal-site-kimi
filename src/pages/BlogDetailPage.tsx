@@ -3,8 +3,11 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowLeft, Clock, Calendar, Tag, Share2, Bookmark } from 'lucide-react';
-import { blogPosts } from '@/data/content';
+import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/markdown';
 import { toast } from 'sonner';
+
+import { remark } from 'remark';
+import html from 'remark-html';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,8 +15,9 @@ export default function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const contentRef = useRef<HTMLDivElement>(null);
   const articleRef = useRef<HTMLElement>(null);
+  const [htmlContent, setHtmlContent] = React.useState('');
 
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = slug ? getBlogPostBySlug(slug) : undefined;
 
   useEffect(() => {
     if (!post) return;
@@ -45,6 +49,17 @@ export default function BlogDetailPage() {
       );
     }, articleRef);
 
+    // Process Markdown
+    remark()
+      .use(html)
+      .process(post.content)
+      .then((file) => {
+        setHtmlContent(String(file));
+      })
+      .catch((err) => {
+        console.error('Markdown processing error:', err);
+      });
+
     return () => ctx.revert();
   }, [post]);
 
@@ -52,13 +67,14 @@ export default function BlogDetailPage() {
     return <Navigate to="/blog" replace />;
   }
 
-  const relatedPosts = blogPosts
+  const allBlogPosts = getAllBlogPosts();
+  const relatedPosts = post ? allBlogPosts
     .filter(
       (p) =>
         p.id !== post.id &&
         (p.category === post.category || p.tags.some((t) => post.tags.includes(t)))
     )
-    .slice(0, 2);
+    .slice(0, 2) : [];
 
   const handleShare = () => {
     if (navigator.share) {
@@ -77,109 +93,7 @@ export default function BlogDetailPage() {
     toast.success('已添加到书签');
   };
 
-  // 渲染Markdown内容
-  const renderMarkdown = (content: string) => {
-    const lines = content.split('\n');
-    const elements: React.ReactNode[] = [];
-    let inCodeBlock = false;
-    let codeContent = '';
 
-    lines.forEach((line, index) => {
-      // 代码块处理
-      if (line.startsWith('```')) {
-        if (inCodeBlock) {
-          // 结束代码块
-          elements.push(
-            <pre
-              key={`code-${index}`}
-              className="bg-slate-900 rounded-lg p-4 my-6 overflow-x-auto"
-            >
-              <code className="text-sm font-mono text-slate-300">
-                {codeContent.trim()}
-              </code>
-            </pre>
-          );
-          codeContent = '';
-          inCodeBlock = false;
-        } else {
-          // 开始代码块
-          inCodeBlock = true;
-        }
-        return;
-      }
-
-      if (inCodeBlock) {
-        codeContent += line + '\n';
-        return;
-      }
-
-      // 标题
-      if (line.startsWith('# ')) {
-        elements.push(
-          <h1
-            key={index}
-            className="text-3xl md:text-4xl font-serif font-bold text-white mt-12 mb-6"
-          >
-            {line.slice(2)}
-          </h1>
-        );
-      } else if (line.startsWith('## ')) {
-        elements.push(
-          <h2
-            key={index}
-            className="text-2xl md:text-3xl font-serif font-bold text-white mt-10 mb-5"
-          >
-            {line.slice(3)}
-          </h2>
-        );
-      } else if (line.startsWith('### ')) {
-        elements.push(
-          <h3
-            key={index}
-            className="text-xl md:text-2xl font-serif font-bold text-white mt-8 mb-4"
-          >
-            {line.slice(4)}
-          </h3>
-        );
-      } else if (line.startsWith('> ')) {
-        // 引用
-        elements.push(
-          <blockquote
-            key={index}
-            className="border-l-4 border-gold pl-4 my-6 text-slate-300 italic"
-          >
-            {line.slice(2)}
-          </blockquote>
-        );
-      } else if (line.startsWith('- ')) {
-        // 列表项
-        elements.push(
-          <li key={index} className="text-slate-300 ml-6 my-2 list-disc">
-            {line.slice(2)}
-          </li>
-        );
-      } else if (line.match(/^\d+\. /)) {
-        // 有序列表
-        elements.push(
-          <li key={index} className="text-slate-300 ml-6 my-2 list-decimal">
-            {line.replace(/^\d+\. /, '')}
-          </li>
-        );
-      } else if (line.trim() === '') {
-        // 空行
-        elements.push(<div key={index} className="h-4" />);
-      } else {
-        // 普通段落
-        elements.push(
-          <p key={index} className="text-slate-300 leading-relaxed my-4">
-            {line}
-          </p>
-        );
-      }
-    });
-
-    return elements;
-  };
 
   return (
     <main ref={articleRef} className="relative min-h-screen pt-24 pb-16">
@@ -257,9 +171,8 @@ export default function BlogDetailPage() {
         <article
           ref={contentRef}
           className="blog-detail-content prose prose-invert prose-lg max-w-none"
-        >
-          {renderMarkdown(post.content)}
-        </article>
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
+        />
 
         {/* Divider */}
         <div className="border-t border-white/10 my-12" />

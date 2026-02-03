@@ -3,11 +3,12 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Link } from 'react-router-dom';
 import { Clock, Calendar, Search, Tag } from 'lucide-react';
-import { blogPosts } from '@/data/content';
+import { getAllBlogPosts } from '@/lib/markdown';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const categories = Array.from(new Set(blogPosts.map((p) => p.category)));
+const allBlogPosts = getAllBlogPosts();
+const categories = Array.from(new Set(allBlogPosts.map((p) => p.category)));
 
 export default function BlogPage() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -15,7 +16,7 @@ export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const filteredPosts = blogPosts.filter((post) => {
+  const filteredPosts = allBlogPosts.filter((post) => {
     const matchesSearch =
       !searchQuery ||
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
