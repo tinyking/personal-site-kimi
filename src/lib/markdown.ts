@@ -11,9 +11,17 @@ export interface BlogPost {
   slug: string;
 }
 
+export interface JournalEntry {
+  id: string;
+  title?: string;
+  date: string;
+  content: string;
+}
+
 // 从markdown文件动态导入博客文章
 // 使用Vite的import.meta.glob特性
 const markdownModules = import.meta.glob('../content/posts/**/*.md', { query: '?raw', import: 'default', eager: true });
+const journalModules = import.meta.glob('../content/journal/**/*.md', { query: '?raw', import: 'default', eager: true });
 
 
 // 定义gray-matter的类型
@@ -151,4 +159,30 @@ export function getAllBlogPosts(): BlogPost[] {
  */
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
   return allBlogPosts.find(post => post.slug === slug);
+}
+
+
+// 处理日记内容
+const importedJournalEntries: JournalEntry[] = Object.entries(journalModules)
+  .map(([path, content]) => {
+    const filename = path.split('/').pop()?.replace('.md', '') || '';
+    // 如果文件名是日期格式 (YYYY-MM-DD)，可以直接作为默认日期
+    const dateFromFilename = /^\d{4}-\d{2}-\d{2}$/.test(filename) ? filename : '';
+
+    const { data, content: markdownContent } = parseMarkdownWithFrontmatter(content as string);
+
+    return {
+      id: filename,
+      title: typeof data.title === 'string' ? data.title : undefined,
+      date: typeof data.date === 'string' ? data.date : (dateFromFilename || '2026-01-01'),
+      content: markdownContent,
+    };
+  })
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+/**
+ * 获取所有日记
+ */
+export function getAllJournalEntries(): JournalEntry[] {
+  return importedJournalEntries;
 }

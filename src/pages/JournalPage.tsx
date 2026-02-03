@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { journalEntries } from '@/data/content';
+import { getAllJournalEntries } from '@/lib/markdown';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function JournalPage() {
+  const journalEntries = getAllJournalEntries();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
 
@@ -129,11 +130,6 @@ export default function JournalPage() {
               );
             })}
           </div>
-        </div>
-
-        {/* Load More Hint */}
-        <div className="text-center mt-12">
-          <p className="text-slate-500 text-sm">持续更新中...</p>
         </div>
       </div>
     </main>
