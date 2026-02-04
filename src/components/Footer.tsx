@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Github, Linkedin, Twitter, Mail, Send, MessageCircle } from 'lucide-react';
+import { Github, Twitter, Mail, Send, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 const quickLinks = [
@@ -12,9 +12,8 @@ const quickLinks = [
 ];
 
 const socialLinks = [
-  { name: 'GitHub', icon: Github, url: 'https://github.com' },
-  { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com' },
-  { name: 'Twitter', icon: Twitter, url: 'https://twitter.com' },
+  { name: 'GitHub', icon: Github, url: 'https://github.com/tinyking' },
+  { name: 'X', icon: Twitter, url: 'https://x.com/tinyking86' },
   { name: '微信公众号', icon: MessageCircle, url: '#' },
 ];
 

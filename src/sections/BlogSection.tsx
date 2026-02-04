@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Clock, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { blogPosts } from '@/data/content';
+import { getAllBlogPosts } from '@/lib/markdown';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +11,11 @@ export default function BlogSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  
+  // 直接获取博客文章数据
+  const blogPosts = getAllBlogPosts()
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 4);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -110,8 +115,16 @@ export default function BlogSection() {
             >
               {/* 封面图区域 */}
               <div className={`relative overflow-hidden ${index === 0 ? 'h-48 md:h-64' : 'h-40'}`}>
-                {/* 渐变背景 */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-800" />
+                {/* 背景图片 */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                  style={{
+                    backgroundImage: `url('https://plus.unsplash.com/premium_photo-1755534835660-d1a16e62c6f6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`
+                  }}
+                />
+                
+                {/* 渐变遮罩 */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                 
                 {/* 装饰图案 */}
                 <div className="absolute inset-0 opacity-20">

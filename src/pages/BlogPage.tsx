@@ -134,8 +134,16 @@ export default function BlogPage() {
             >
               {/* 封面图区域 */}
               <div className="relative h-48 overflow-hidden">
-                {/* 渐变背景 */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-800" />
+                {/* 背景图片 */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                  style={{
+                    backgroundImage: `url('https://plus.unsplash.com/premium_photo-1755534835660-d1a16e62c6f6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`
+                  }}
+                />
+                
+                {/* 渐变遮罩 */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
                 {/* 装饰图案 */}
                 <div className="absolute inset-0 opacity-20">

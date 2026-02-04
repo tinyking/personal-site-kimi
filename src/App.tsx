@@ -3,6 +3,7 @@ import { Toaster } from 'sonner';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import ScrollToTop from '@/components/ScrollToTop';
 import HomePage from '@/pages/HomePage';
 import WorksPage from '@/pages/WorksPage';
 import BlogPage from '@/pages/BlogPage';
@@ -15,6 +16,7 @@ function App() {
   return (
     <ThemeProvider>
       <Router>
+        <ScrollToTop />
         <div className="min-h-screen bg-dark-bg text-white">
           <Navbar />
           <Routes>
