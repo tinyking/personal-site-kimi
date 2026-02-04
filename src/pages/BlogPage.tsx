@@ -7,7 +7,7 @@ import { getAllBlogPosts } from '@/lib/markdown';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const allBlogPosts = getAllBlogPosts();
+const allBlogPosts = getAllBlogPosts().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 const categories = Array.from(new Set(allBlogPosts.map((p) => p.category)));
 
 export default function BlogPage() {

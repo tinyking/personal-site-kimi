@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 
 import { remark } from 'remark';
 import html from 'remark-html';
+import gfm from 'remark-gfm';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,8 +50,9 @@ export default function BlogDetailPage() {
       );
     }, articleRef);
 
-    // Process Markdown
+    // Process Markdown with GFM support for tables
     remark()
+      .use(gfm)
       .use(html)
       .process(post.content)
       .then((file) => {

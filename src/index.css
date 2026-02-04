@@ -237,6 +237,32 @@
     background: var(--gold);
     border: 2px solid var(--dark-bg);
   }
+  
+  /* Markdown 表格样式 */
+  .prose table {
+    @apply w-full border-collapse my-6;
+    border-spacing: 0;
+  }
+  
+  .prose table th {
+    @apply px-4 py-3 text-left font-semibold align-top;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--gold);
+  }
+  
+  .prose table td {
+    @apply px-4 py-3 align-top;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .prose table tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  .prose table tr:hover {
+    background: rgba(212, 175, 55, 0.05);
+  }
 }
 
 @layer utilities {
