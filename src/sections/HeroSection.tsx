@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ArrowDown } from 'lucide-react';
 
@@ -89,11 +90,11 @@ export default function HeroSection() {
       <div className="absolute inset-0">
         {/* 渐变背景 */}
         <div className="absolute inset-0 bg-gradient-to-b from-dark-bg via-dark-bg to-dark-card" />
-        
+
         {/* 径向渐变装饰 */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl" />
-        
+
         {/* 浮动装饰元素 */}
         <div className="float-element absolute top-20 left-10 w-2 h-2 bg-gold/30 rounded-full" />
         <div className="float-element absolute top-40 right-20 w-3 h-3 bg-gold/20 rounded-full" />
@@ -148,19 +149,19 @@ export default function HeroSection() {
 
         {/* CTA Buttons */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0 animate-fade-in-up animation-delay-500">
-          <a
-            href="/works"
+          <Link
+            to="/works"
             className="btn-primary gap-2"
           >
             查看作品
             <ArrowDown className="w-4 h-4" />
-          </a>
-          <a
-            href="/blog"
+          </Link>
+          <Link
+            to="/blog"
             className="btn-secondary"
           >
             阅读博客
-          </a>
+          </Link>
         </div>
       </div>
 

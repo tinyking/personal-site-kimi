@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { projects } from '@/data/content';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -82,13 +83,13 @@ export default function ProjectsSection() {
               探索我最新的技术产品和创作
             </p>
           </div>
-          <a
-            href="/works"
+          <Link
+            to="/works"
             className="mt-4 md:mt-0 inline-flex items-center gap-2 text-gold hover:text-gold-light transition-colors duration-300 group"
           >
             查看全部
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-          </a>
+          </Link>
         </div>
 
         {/* Projects Grid */}
@@ -99,14 +100,13 @@ export default function ProjectsSection() {
           {projects.slice(0, 4).map((project, index) => (
             <div
               key={project.id}
-              className={`project-card group relative bg-dark-card rounded-2xl p-6 md:p-8 border border-white/5 card-hover ${
-                index === 0 ? 'md:col-span-2' : ''
-              }`}
+              className={`project-card group relative bg-dark-card rounded-2xl p-6 md:p-8 border border-white/5 card-hover ${index === 0 ? 'md:col-span-2' : ''
+                }`}
               style={{ transformStyle: 'preserve-3d' }}
             >
               {/* 卡片发光效果 */}
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              
+
               {/* 技术栈标签 */}
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.techStack.slice(0, 3).map((tech) => (
